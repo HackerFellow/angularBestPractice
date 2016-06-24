@@ -58,10 +58,22 @@ app.factory('RedditService', ['$http', '$q', function($http, $q) {
 	return service;
 }]);
 
-app.controller('MainController', ['$scope', 'RedditService',
-		function($scope, reddit) {
-	$scope.pageTitle = "todo: Rename";
-	$scope.appName = "todo: Rename";
+// http://stackoverflow.com/a/12506795/2423187
+app.factory('Page', function(){
+	var title = 'todo: Rename';
+	var appName = 'TODO: Rename';
+	return {
+		title: function() { return title; },
+		setTitle: function(newTitle) { title = newTitle; },
+
+		appName: function() { return appName; },
+		setAppName: function(newName) { appName = newName; },
+	};
+});
+
+app.controller('MainController', ['$scope', 'Page',
+		function($scope, Page) {
+	$scope.Page = Page;
 }]);
 app.controller('LandingController', ['$scope', 'RedditService',
 		function($scope, reddit) {
