@@ -1,4 +1,4 @@
-var app = angular.module("todoRename", ['ngRoute']);
+var app = angular.module("todoRename", ['ngRoute', 'directive.g+signin']);
 
 //We use hashbangs here, not your terrible html5 urls
 app.config(['$locationProvider', function($locationProvider){
@@ -8,7 +8,7 @@ app.config(['$locationProvider', function($locationProvider){
 
 
 
-app.config(function($routeProvider) {
+app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 	$routeProvider
 	.when('/', {
 		templateUrl: 'template/landing.html',
@@ -17,7 +17,7 @@ app.config(function($routeProvider) {
 	.otherwise({
 		redirectTo: '/'
 	});
-});
+}]);
 
 app.directive('redditHeadline', function() {
 	return {
@@ -74,18 +74,29 @@ app.factory('Page', function(){
 app.controller('MainController', ['$scope', 'Page',
 		function($scope, Page) {
 	$scope.Page = Page;
+	$scope.$on('event:google-plus-signin-success', function (event,authResult) {
+		console.log(authResult);
+		// Send login to server or save into cookie
+		var profile = authResult.getBasicProfile();
+		console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+		//ID token: authResult.getAuthResponse().id_token https://developers.google.com/identity/sign-in/web/backend-auth
+		console.log('Name: ' + profile.getName());
+		console.log('Image URL: ' + profile.getImageUrl());
+		console.log('Email: ' + profile.getEmail());
+	});
+	$scope.$on('event:google-plus-signin-failure', function (event,authResult) {
+		console.log("Google sign in failed");
+	});
 }]);
 app.controller('LandingController', ['$scope', 'RedditService',
 		function($scope, reddit) {
-	//$scope.refresh = function(){
-	//	reddit.reload().then(
-	//		function(redditData){
-	//			$scope.redditData = redditData;
-	//		},
-	//		function(error){
-	//			$scope.errmsg = error;
-	//			$scope.error = true;
-	//		});
-	//}
-	//$scope.refresh();//Initial load
 }]);
+
+
+function signOut() {
+	var auth2 = gapi.auth2.getAuthInstance();
+		auth2.signOut().then(function () {
+		console.log('User signed out.');
+	});
+}
+
