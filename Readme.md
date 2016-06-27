@@ -6,6 +6,10 @@ config functions: https://github.com/johnpapa/angular-styleguide/tree/master/a1#
 
 Avoid $scope, use controllerAs directive to do controller.var instead of var, and set $scope.var in controller
 
+
+use Immediately Invoked Function Expression (IIFE).
+https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y010
+
 https://scotch.io/tutorials/angularjs-best-practices-directory-structure
 
 "The app.module.js file will handle the setup of your app, load in AngularJS dependencies and so on. The app.route.js file will handle all the routes and the route configuration"
